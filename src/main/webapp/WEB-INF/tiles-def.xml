@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.0//EN"
+        "http://tiles.apache.org/dtds/tiles-config_2_0.dtd">
+<tiles-definitions>
+    <!-- Base definition -->
+    <definition name="base.definition" template="/WEB-INF/tiles/layouts/skeleton.jsp">
+        <put-attribute name="title" value="" />
+        <put-attribute name="currentPage" value="home" />
+    </definition>
+    <!-- Home pages -->
+    <definition name="home" extends="base.definition">
+        <put-attribute name="content" value="/WEB-INF/views/index.jsp" />
+    </definition>
+    <definition name="files" extends="base.definition">
+        <put-attribute name="content" value="/WEB-INF/views/files.jsp" />
+    </definition>
+    <definition name="header" extends="base.definition">
+        <put-attribute name="content" value="/WEB-INF/views/header.jsp" />
+    </definition>
+</tiles-definitions>
