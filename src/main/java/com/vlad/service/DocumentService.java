@@ -2,12 +2,12 @@ package com.vlad.service;
 
 import com.vlad.model.CSVDocument;
 import com.vlad.model.IDocument;
+import com.vlad.utils.DateChecker;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.commons.validator.routines.DateValidator;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
@@ -25,12 +25,13 @@ import java.util.stream.Collectors;
 @Service
 public class DocumentService {
 
+    private DateChecker dateChecker = new DateChecker();
+
     public List<IDocument> getDocuments() throws IOException {
         String[] extensions = new String[] {"csv"};
         File folderCSV = new File(getFolderVariable());
         List<File> listOfFiles = (List<File>) FileUtils.listFiles(folderCSV, extensions, true);
         List<IDocument> documents = new ArrayList<>();
-
 
         for (File file : listOfFiles) {
             if (file.isFile() ) {
@@ -144,39 +145,11 @@ public class DocumentService {
             }
         } else if (Boolean.parseBoolean(value)) {
             return "BOOLEAN";
-        } else if (isDate(value)) {
+        } else if (dateChecker.isDate(value)) {
             return "DATE";
         } else {
             return "STRING";
         }
-    }
-
-    private boolean isDate(String value) {
-        DateValidator validator = new DateValidator(false, -1);
-        List<String> dateFormat = new ArrayList<>();
-
-        dateFormat.add("dd-MM-yy");
-        dateFormat.add("dd-MM-yyyy");
-        dateFormat.add("MM-dd-yyyy");
-        dateFormat.add("yyyy-MM-dd");
-        dateFormat.add("yyyy-MM-dd HH:mm:ss");
-        dateFormat.add("yyyy-MM-dd HH:mm:ss.SSS");
-        dateFormat.add("yyyy-MM-dd HH:mm:ss.SSSZ");
-        dateFormat.add("EEEEE MMMMM yyyy HH:mm:ss.SSSZ");
-        dateFormat.add("dd/MM/yy");
-        dateFormat.add("dd/MM/yyyy");
-        dateFormat.add("MM/dd/yyyy");
-        dateFormat.add("yyyy/MM/dd");
-        dateFormat.add("yyyy/MM/dd HH:mm:ss");
-        dateFormat.add("yyyy/MM/dd HH:mm:ss.SSS");
-        dateFormat.add("yyyy/MM/dd HH:mm:ss.SSSZ");
-
-        for (String datePattern : dateFormat) {
-            if (validator.isValid(value, datePattern)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private static String getFolderVariable() {
